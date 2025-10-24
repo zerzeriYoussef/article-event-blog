@@ -18,8 +18,9 @@ defineProps({
 });
 
 const menuItems = ref([
-    { label: 'home.features', link: "/#features" },
-    { label: 'home.blogs', link: route('posts.index') },
+    { label: 'welcome', link: "/#features" },
+    { label: 'evenement    ' },
+        { label: 'contact us    ' },
 ]);
 
 const isScrolled = ref(false);

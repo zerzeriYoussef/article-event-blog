@@ -5,7 +5,6 @@ import Trusted from '@/Components/Home/Trusted.vue';
 import BlogSection from '@/Components/Blog/BlogSection.vue';
 import GeneralLayout from '@/Layouts/GeneralLayout.vue';
 import StackSection from '@/Components/Home/StackSection.vue';
-
 const props = defineProps({
     posts: {
         type: Array,
@@ -62,16 +61,15 @@ const descriptions = {
             <meta property="og:locale:alternate" content="es_ES" />
 
             <!-- Twitter -->
-            <meta property="twitter:card" content="summary_large_image" />
-            <meta property="twitter:url" :content="alternateUrls[currentLocale]" />
-            <meta property="twitter:title" :content="titles[currentLocale]" />
-            <meta property="twitter:description" :content="descriptions[currentLocale]" />
-            <meta property="twitter:image" content="https://lara4.com/favicon.png" />
+                <meta property="twitter:card" content="summary_large_image" />
+                <meta property="twitter:url" :content="alternateUrls[currentLocale]" />
+                <meta property="twitter:title" :content="titles[currentLocale]" />
+                <meta property="twitter:description" :content="descriptions[currentLocale]" />
+                <meta property="twitter:image" content="https://lara4.com/favicon.png" />
         </Head>
 
         <Hero />
         <StackSection />
-        <Trusted />
-        <BlogSection :posts="posts.data" v-if="posts.data.length > 0" />
+      
     </GeneralLayout>
 </template>

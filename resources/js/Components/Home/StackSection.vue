@@ -4,44 +4,44 @@ import { useIntersectionObserver } from '@vueuse/core';
 
 const stacks = [
     {
-        name: 'Laravel',
-        description: 'Modern PHP Framework',
-        icon: 'https://cdn.simpleicons.org/laravel/FF2D20',
-        color: 'text-red-500',
-        bgColor: 'bg-red-50 dark:bg-red-900/20',
-        link: 'https://laravel.com'
+        name: 'Conferences',
+        description: 'Expert-led sessions',
+        icon: 'https://cdn.simpleicons.org/googlemeet/00897B',
+        color: 'text-teal-600',
+        bgColor: 'bg-teal-50 dark:bg-teal-900/20',
+        link: '#'
     },
     {
-        name: 'Vue.js',
-        description: 'Progressive JS Framework',
-        icon: 'https://cdn.simpleicons.org/vuedotjs/4FC08D',
-        color: 'text-green-500',
-        bgColor: 'bg-green-50 dark:bg-green-900/20',
-        link: 'https://vuejs.org'
+        name: 'Workshops',
+        description: 'Hands-on learning',
+        icon: 'https://cdn.simpleicons.org/hackthebox/9FEF00',
+        color: 'text-lime-600',
+        bgColor: 'bg-lime-50 dark:bg-lime-900/20',
+        link: '#'
     },
     {
-        name: 'Inertia.js',
-        description: 'Modern Monolith Builder',
-        icon: 'https://cdn.simpleicons.org/inertia/9553E9',
-        color: 'text-purple-500',
-        bgColor: 'bg-purple-50 dark:bg-purple-900/20',
-        link: 'https://inertiajs.com'
+        name: 'Seminars',
+        description: 'Academic discussions',
+        icon: 'https://cdn.simpleicons.org/googlescholar/4285F4',
+        color: 'text-blue-600',
+        bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+        link: '#'
     },
     {
-        name: 'Tailwind CSS',
-        description: 'Utility-First CSS',
-        icon: 'https://cdn.simpleicons.org/tailwindcss/06B6D4',
-        color: 'text-cyan-500',
-        bgColor: 'bg-cyan-50 dark:bg-cyan-900/20',
-        link: 'https://tailwindcss.com'
+        name: 'Competitions',
+        description: 'Showcase your skills',
+        icon: 'https://cdn.simpleicons.org/codechef/5B4638',
+        color: 'text-amber-600',
+        bgColor: 'bg-amber-50 dark:bg-amber-900/20',
+        link: '#'
     },
     {
-        name: 'Filament',
-        description: 'Admin Panel & Forms',
-        icon: 'https://cdn.simpleicons.org/filament/EF3B2D',
-        color: 'text-indigo-500',
-        bgColor: 'bg-indigo-50 dark:bg-indigo-900/20',
-        link: 'https://filamentphp.com'
+        name: 'Networking',
+        description: 'Connect & collaborate',
+        icon: 'https://cdn.simpleicons.org/meetup/ED1C40',
+        color: 'text-rose-600',
+        bgColor: 'bg-rose-50 dark:bg-rose-900/20',
+        link: '#'
     }
 ];
 
@@ -67,10 +67,10 @@ const { stop } = useIntersectionObserver(
                  :class="[isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10']"
                  style="transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1)">
                 <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent">
-                    Powered by Modern Stack
+                    Explore Event Categories
                 </h2>
                 <p class="text-lg text-gray-600 dark:text-gray-300">
-                    Built with cutting-edge technologies for optimal performance
+                    Join diverse academic events tailored to enhance your university experience
                 </p>
             </div>
 

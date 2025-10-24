@@ -18,10 +18,10 @@
         </div>
         <hr class="border-slate-200 dark:border-slate-700" />
         <div class="flex items-center text-center justify-between flex-col sm:flex-row gap-4">
-          <p v-text="'Copyright © 2023 Lara4. All rights reserved.'" />
+          <p v-text="'Copyright © zarzour.'" />
           <div class="flex items-center gap-4">
             <a
-              href="https://github.com/abdessamadbettal/Lara4"
+              href="#"
               target="_blank"
               class="hover:text-slate-900 dark:hover:text-slate-300 p-2 transition-colors duration-300"
             >
@@ -30,9 +30,7 @@
           </div>
         </div>
       </Container>
-      <p class="py-3 text-center text-gray-600 dark:text-white/70 text-xs">
-        Laravel v{{ laravelVersion }} (PHP v{{ phpVersion }})
-      </p>
+    
     </footer>
   </template>
 

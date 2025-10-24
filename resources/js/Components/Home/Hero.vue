@@ -11,12 +11,12 @@ const props = defineProps({
     }
 });
 
-// Dynamic typewriter words based on Lara4 features
+// Dynamic typewriter words based on academic events
 const typedStrings = [
-    'Modern',
-    'Powerful',
-    'Multilingual',
-    'SEO-Optimized'
+    'Innovative',
+    'Connected',
+    'Academic',
+    'Collaborative'
 ];
 
 // Feature indicators with proper icons
@@ -66,12 +66,12 @@ const features = [
             <!-- Main Headline -->
             <h1 class="font-bold tracking-tight text-gray-900 dark:text-white">
                 <span class="block text-4xl sm:text-6xl lg:text-7xl mb-4">
-                    {{ $t('home.welcome_to') }}
+                    Welcome to Your University
                 </span>
                 <span class="block text-4xl sm:text-6xl lg:text-7xl">
                     <span class="relative whitespace-nowrap text-[#FF2D20]">
                         <IconTextDecoration class="absolute top-2/3 left-0 h-[0.58em] w-full fill-[#FF2D20]/20" />
-                        <span class="relative">Lara4</span>
+                        <span class="relative">Event Hub</span>
                     </span>
                     <span class="text-[#FF2D20]"> - </span>
                     <VueTypewriterEffect :strings="typedStrings" :loop="true" :autoStart="true" />
@@ -80,41 +80,33 @@ const features = [
 
             <!-- Subtext -->
             <p class="mx-auto mt-8 max-w-3xl text-lg sm:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
-                {{ $t('home.hero_description') }}
+                Discover, register, and participate in all academic events. Connect with conferences, workshops, seminars, and competitions in one centralized platform.
             </p>
 
             <!-- CTAs -->
             <div class="mt-12 flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
                 <Button
-                    :href="route('register')"
+                 
                     method="get"
                     class="group relative px-8 py-3 text-lg"
                     variant="primary"
                 >
-                    <span class="relative z-10">{{ $t('home.get_started') }}</span>
+                    <span class="relative z-10">Get Started</span>
                 </Button>
                 
                 <Button
-                    href="https://github.com/abdessamadbettal/Lara4"
+                  
                     class="px-8 py-3 text-lg"
                     variant="outline"
                     as="a"
                     target="_blank"
                 >
-                    {{ $t('home.view_on_github') }}
+                    Explore Events
                 </Button>
             </div>
 
             <!-- Feature Indicators with SVG Icons -->
-            <div class="mt-16 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-                <div v-for="(feature, index) in features" :key="index" 
-                     class="flex flex-col items-center transform transition-all duration-300 hover:scale-110">
-                    <div :class="['w-14 h-14 flex items-center justify-center rounded-full p-3 mb-3', feature.bgColor]">
-                        <img :src="feature.icon" :alt="feature.name" class="w-8 h-8 drop-shadow-sm">
-                    </div>
-                    <span :class="['text-sm font-medium', feature.color]">{{ feature.name }}</span>
-                </div>
-            </div>
+     
 
             <!-- Scroll indicator -->
             <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">

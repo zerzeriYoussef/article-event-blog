@@ -17,6 +17,8 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class CategoryResource extends Resource
 {
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?string $model = Category::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
