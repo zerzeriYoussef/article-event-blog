@@ -117,6 +117,25 @@ class User extends Authenticatable  implements HasMedia, FilamentUser
         return $this->hasMany(Post::class, 'author_id');
     }
 
+    /**
+     * Get all event participation requests made by this user.
+     */
+    public function eventParticipations()
+    {
+        return $this->hasMany(EventParticipant::class);
+    }
+
+    /**
+     * Get events this user is participating in (accepted requests).
+     */
+    public function participatingEvents()
+    {
+        return $this->belongsToMany(Post::class, 'event_participants', 'user_id', 'post_id')
+            ->withPivot('status', 'message', 'responded_at')
+            ->withTimestamps()
+            ->wherePivot('status', 'accepted');
+    }
+
     public function isAuthenticated(): bool
     {
         return $this->exists;

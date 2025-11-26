@@ -59,28 +59,83 @@
                 </span>
             </div>
 
-            <!-- Read More Link -->
-            <Link 
-                :href="route('posts.show', item.slug)"
-                class="inline-flex items-center text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors duration-300"
-            >
-                {{ $t('read_more') }}
-                <ChevronRight class="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
-            </Link>
+            <!-- Actions -->
+            <div class="flex items-center justify-between">
+                <Link 
+                    :href="route('posts.show', item.slug)"
+                    class="inline-flex items-center text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 font-medium transition-colors duration-300"
+                >
+                    {{ $t('read_more') }}
+                    <ChevronRight class="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
+                </Link>
+
+                <!-- Join Event Button (only for authenticated users) -->
+                <div v-if="$page.props.auth?.user && item.id">
+                    <button
+                        v-if="!item.participation_status || item.participation_status === 'none'"
+                        @click="joinEvent"
+                        :disabled="isJoining"
+                        class="inline-flex items-center px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium rounded-lg transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <UserPlus v-if="!isJoining" class="w-4 h-4 mr-2" />
+                        <span v-if="!isJoining">{{ $t('join_event') || 'Join Event' }}</span>
+                        <span v-else>{{ $t('joining') || 'Joining...' }}</span>
+                    </button>
+                    
+                    <div v-else-if="item.participation_status === 'pending'" class="inline-flex items-center px-4 py-2 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 text-sm font-medium rounded-lg">
+                        <Clock class="w-4 h-4 mr-2" />
+                        {{ $t('pending_approval') || 'Pending Approval' }}
+                    </div>
+                    
+                    <div v-else-if="item.participation_status === 'accepted'" class="inline-flex items-center px-4 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-sm font-medium rounded-lg">
+                        <CheckCircle class="w-4 h-4 mr-2" />
+                        {{ $t('joined') || 'Joined' }}
+                    </div>
+                    
+                    <button
+                        v-else-if="item.participation_status === 'rejected'"
+                        @click="joinEvent"
+                        :disabled="isJoining"
+                        class="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm font-medium rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
+                    >
+                        <UserPlus class="w-4 h-4 mr-2" />
+                        {{ $t('request_again') || 'Request Again' }}
+                    </button>
+                </div>
+            </div>
         </div>
     </article>
 </template>
 
 <script setup>
-import { Timer, ChevronRight } from 'lucide-vue-next';
-import { Link } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import { Timer, ChevronRight, UserPlus, Clock, CheckCircle } from 'lucide-vue-next';
+import { Link, useForm, router } from '@inertiajs/vue3';
 
-defineProps({
+const props = defineProps({
     item: {
         type: Object,
         required: true
     }
 });
+
+const isJoining = ref(false);
+
+const joinEvent = () => {
+    if (isJoining.value) return;
+    
+    isJoining.value = true;
+    
+    router.post(route('events.join', props.item.slug), {}, {
+        preserveScroll: true,
+        onSuccess: () => {
+            isJoining.value = false;
+        },
+        onError: () => {
+            isJoining.value = false;
+        }
+    });
+};
 </script>
 
 <style scoped>

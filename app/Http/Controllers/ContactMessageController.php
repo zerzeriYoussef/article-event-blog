@@ -7,15 +7,18 @@ use App\Models\ContactMessage;
 use App\Mail\ContactMessageMail;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\ContactUs\StoreContactMessageRequest;
+use Inertia\Inertia;
 
 class ContactMessageController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display the contact page.
      */
     public function index()
     {
-        //
+        return Inertia::render('Contact', [
+            'currentLocale' => app()->getLocale(),
+        ]);
     }
 
     /**

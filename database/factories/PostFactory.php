@@ -59,16 +59,24 @@ class PostFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Post $post) {
-            // Get all images from the specified directory
-            $postImages = File::glob(storage_path('app/images/covers/*.{jpg,jpeg,png,gif}'), GLOB_BRACE);
-
-            // Ensure there are at least four images by duplicating if necessary
-            while (count($postImages) < 4) {
-                $postImages = array_merge($postImages, $postImages);
-            }
-
-            // Randomly select four images
-            $selectedImages = array_rand(array_flip($postImages), 4);
+            // Random image URLs from Unsplash (free stock photos)
+            $imageUrls = [
+                'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=800&fit=crop',
+                'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&h=800&fit=crop',
+                'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=1200&h=800&fit=crop',
+                'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&h=800&fit=crop',
+                'https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1200&h=800&fit=crop',
+                'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&h=800&fit=crop',
+                'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=800&fit=crop',
+                'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1200&h=800&fit=crop',
+                'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&h=800&fit=crop',
+                'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=800&fit=crop',
+                'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop',
+                'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1200&h=800&fit=crop',
+                'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop',
+                'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=800&fit=crop',
+                'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1200&h=800&fit=crop',
+            ];
 
             // Create the temporary directory if it doesn't exist
             $tempDir = storage_path('app/temp');
@@ -76,21 +84,27 @@ class PostFactory extends Factory
                 File::makeDirectory($tempDir, 0755, true);
             }
 
-            // Attach the first three images to the 'images' collection
-            for ($i = 0; $i < 3; $i++) {
-                $tempImagePath = $tempDir . '/' . basename($selectedImages[$i]);
-                File::copy($selectedImages[$i], $tempImagePath);
-                $post->addMedia($tempImagePath)
-                        ->toMediaCollection('image_cover');
-            }
+            // Download and attach random images
+            $randomImageUrl = $imageUrls[array_rand($imageUrls)];
+            $imageContent = file_get_contents($randomImageUrl);
+            $imageName = 'cover_' . uniqid() . '.jpg';
+            $tempImagePath = $tempDir . '/' . $imageName;
+            File::put($tempImagePath, $imageContent);
+            
+            $post->addMedia($tempImagePath)
+                ->toMediaCollection('image_cover');
 
-            // Attach the fourth image to the 'thumbnail' collection
-            $tempThumbnailPath = $tempDir . '/' . basename($selectedImages[3]);
-            File::copy($selectedImages[3], $tempThumbnailPath);
+            // Download and attach thumbnail
+            $randomThumbnailUrl = $imageUrls[array_rand($imageUrls)];
+            $thumbnailContent = file_get_contents($randomThumbnailUrl);
+            $thumbnailName = 'thumbnail_' . uniqid() . '.jpg';
+            $tempThumbnailPath = $tempDir . '/' . $thumbnailName;
+            File::put($tempThumbnailPath, $thumbnailContent);
+            
             $post->addMedia($tempThumbnailPath)
-                    ->toMediaCollection('thumbnail');
+                ->toMediaCollection('thumbnail');
 
-                    // Attach 2 to 4 random tags
+            // Attach 2 to 4 random tags
             $tags = Tag::inRandomOrder()->take(rand(2, 4))->get();
             $post->tags()->attach($tags);
         });

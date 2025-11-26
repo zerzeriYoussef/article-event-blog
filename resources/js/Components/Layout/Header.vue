@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue"
 import Container from "@/Components/Container.vue"
-import Logo from "@/Components/Icons/Logo.vue"
 import IconBars from "@/Components/Icons/IconBars.vue"
 import IconX from "@/Components/Icons/IconX.vue"
 import Button from "@/Components/Button.vue"
@@ -12,6 +11,7 @@ import DropdownLink from '@/Components/DropdownLink.vue'
 import ThemeSwitcher from "@/Components/ThemeSwitcher.vue"
 import LanguageSwitcher from "@/Components/LanguageSwitcher.vue"
 import MobileNav from "@/Components/Layout/MobileNav.vue"
+import NotificationBell from "@/Components/Notifications/NotificationBell.vue"
 
 const props = defineProps({
     menuItems: {
@@ -76,10 +76,6 @@ const headerClass = computed(() => [
         <Container class="relative flex items-center justify-between gap-4 py-3">
             <!-- Logo and Navigation -->
             <div class="flex items-center gap-8">
-                <Link :href="route('welcome')" class="transition-transform hover:scale-105 duration-200">
-                <Logo class="h-10 sm:h-8 md:h-10" />
-                </Link>
-
                 <nav class="items-center gap-4 hidden md:flex">
                     <Link v-for="menu in menuItems" :key="menu.label" :href="menu.link"
                         class="relative rounded-lg py-1.5 px-3 transition-all duration-300 hover:bg-red-100 dark:hover:bg-red-800/30 font-medium text-gray-700 dark:text-gray-200 group">
@@ -97,6 +93,9 @@ const headerClass = computed(() => [
                 <ThemeSwitcher class="transition-transform hover:scale-110" />
                 <LanguageSwitcher :locales="$page.props.locales" :currentLocale="$page.props.currentLocale"
                     class="transition-transform hover:scale-110" />
+
+                <!-- Notifications -->
+                <NotificationBell v-if="$page.props.auth.user" />
 
                 <!-- User Menu -->
                 <div class="hidden sm:flex sm:items-center" v-if="$page.props.auth.user">
@@ -140,6 +139,12 @@ const headerClass = computed(() => [
                                 </template>
                                 <DropdownLink :href="route('dashboard')" >
                                     {{ $t('auth.dashboard') }}
+                                </DropdownLink>
+                                <DropdownLink :href="route('my-events')" class="flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    {{ $t('my_events') || 'My Events' }}
                                 </DropdownLink>
                                 <DropdownLink :href="route('profile.edit')">
                                     {{ $t('auth.profile') }}

@@ -19,8 +19,8 @@ defineProps({
 
 const menuItems = ref([
     { label: 'welcome', link: "/#features" },
-    { label: 'evenement    ' },
-        { label: 'contact us    ' },
+    { label: 'evenement', link: "/posts" },
+    { label: 'contact us', link: "/contact" },
 ]);
 
 const isScrolled = ref(false);

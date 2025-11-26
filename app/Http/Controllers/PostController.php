@@ -17,13 +17,22 @@ class PostController extends Controller
     {
         $locale = app()->getLocale();
         
-        $posts = Post::whereNotNull("name->$locale")
-            ->whereNotNull("slug->$locale")
+        $posts = Post::published()
+            ->where(function($query) use ($locale) {
+                $query->whereNotNull("name->$locale")
+                      ->orWhereNotNull("name->en"); // Fallback to English if locale doesn't exist
+            })
+            ->where(function($query) use ($locale) {
+                $query->whereNotNull("slug->$locale")
+                      ->orWhereNotNull("slug->en"); // Fallback to English if locale doesn't exist
+            })
+            ->orderBy('published_at', 'desc')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return request()->wantsJson()
             ? PostResource::collection($posts)
-            : Inertia::render('Post/Posts', ['posts' => PostResource::collection($posts)]);
+            : Inertia::render('p/Posts', ['posts' => PostResource::collection($posts)]);
     }
 
     /**
@@ -35,7 +44,7 @@ class PostController extends Controller
      * Display the specified resource.
      */
     public function show($slug)
-    {
+    {   
         $locale = app()->getLocale();
         $post = Post::where("slug->$locale", $slug)->first();
 
@@ -65,9 +74,10 @@ class PostController extends Controller
             ->get();
         return request()->wantsJson()
             ? new PostResource($post)
-            : Inertia::render('Post/Post', [
+            : Inertia::render('p/Post', [
                 'post' => new PostResource($post),
                 'related_posts' => PostResource::collection($related_posts),
+                'canManageParticipants' => auth()->check() && auth()->id() === $post->author_id,
             ]);
     }
 

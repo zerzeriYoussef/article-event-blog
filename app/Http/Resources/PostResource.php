@@ -47,6 +47,23 @@ class PostResource extends JsonResource
             'format' => 'png',
             'bold' => 'true'
         ]);
+        // Get participation status for authenticated user
+        $participationStatus = 'none';
+        $isParticipating = false;
+        if ($request->user()) {
+            try {
+                $participation = $this->participants()
+                    ->where('user_id', $request->user()->id)
+                    ->first();
+                if ($participation) {
+                    $participationStatus = $participation->status;
+                    $isParticipating = true;
+                }
+            } catch (\Exception $e) {
+                // Handle error silently
+            }
+        }
+
         return [
             'id' => $this->id,
             'name' => Str::limit($this->name, 60, '...'),
@@ -71,6 +88,24 @@ class PostResource extends JsonResource
             'is_featured' => $this->is_featured,
             'published_at' => $this->published_at,
             'tags' => TagResource::collection($this->tags),
+            'participation_status' => $participationStatus,
+            'participants_count' => $this->acceptedParticipants()->count(),
+            'pending_participants_count' => $this->pendingParticipants()->count(),
+            'accepted_participants' => $this->acceptedParticipants()
+                ->with('user:id,name,email,avatar')
+                ->get()
+                ->map(function ($participant) {
+                    return [
+                        'id' => $participant->id,
+                        'user' => [
+                            'id' => $participant->user->id,
+                            'name' => $participant->user->name,
+                            'email' => $participant->user->email,
+                            'avatar' => $participant->user->avatar ?? "https://ui-avatars.com/api/?name=" . urlencode($participant->user->name),
+                        ],
+                        'joined_at' => $participant->responded_at?->diffForHumans() ?? $participant->created_at->diffForHumans(),
+                    ];
+                }),
             'created_at' => $this->created_at->diffForHumans(),
             'updated_at' => $this->updated_at->diffForHumans(),
         ];

@@ -15,7 +15,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class NewsletterResource extends Resource
-{
+{protected static bool $shouldRegisterNavigation = false;
+
     protected static ?string $model = Newsletter::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-inbox-arrow-down';

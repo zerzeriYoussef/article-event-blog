@@ -1,5 +1,5 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import BlogCard from '@/Components/Blog/BlogCard.vue';
 import Pagination from '@/Components/Pagination.vue';
@@ -82,25 +82,42 @@ const canonicalUrl = computed(() => {
             <!-- <script type="application/ld+json" v-text="JSON.stringify(blogSchema)"></script> -->
         </Head>
 
-        <section class="relative md:py-24 py-16">
-            <div class="container relative">
-                <!-- Optional: Breadcrumbs for SEO -->
+        <!-- Hero Section -->
+        <section class="relative py-20 bg-gradient-to-br from-primary-50 via-white to-primary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+            <div class="absolute inset-0 overflow-hidden">
+                <div class="absolute inset-0 bg-grid-slate-100 opacity-5"></div>
+            </div>
+            <div class="container relative mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+                        {{ $t('events') || 'Events & Posts' }}
+                    </h1>
+                    <p class="text-xl text-gray-600 dark:text-gray-300">
+                        {{ $t('events_description') || 'Discover our latest events, workshops, and academic activities' }}
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="relative md:py-24 py-16 bg-white dark:bg-gray-900">
+            <div class="container relative mx-auto px-6">
+                <!-- Breadcrumbs -->
                 <nav aria-label="Breadcrumb" class="mb-8">
                     <ol class="flex items-center space-x-2 text-sm">
                         <li>
-                            <Link :href="route('welcome')" class="text-gray-500 hover:text-primary-500">
-                                {{ $t('home') }}
+                            <Link :href="route('welcome')" class="text-gray-500 hover:text-primary-500 transition-colors">
+                                {{ $t('home') || 'Home' }}
                             </Link>
                         </li>
-                        <li class="text-gray-300">/</li>
-                        <li class="text-gray-900 dark:text-white">
-                            {{ $t('blog') }}
+                        <li class="text-gray-300 dark:text-gray-600">/</li>
+                        <li class="text-gray-900 dark:text-white font-medium">
+                            {{ $t('events') || 'Events' }}
                         </li>
                     </ol>
                 </nav>
 
                 <!-- Main Content -->
-                <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
+                <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8">
                     <template v-if="isLoading">
                         <div v-for="n in 3" :key="n" class="group relative overflow-hidden">
                             <Skeleton width="100%" height="200px" />
@@ -121,13 +138,37 @@ const canonicalUrl = computed(() => {
                     </template>
                 </div>
 
+                <!-- Empty State -->
+                <div v-if="!isLoading && (!posts.data || posts.data.length === 0)" class="col-span-full text-center py-20">
+                    <div class="max-w-md mx-auto">
+                        <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
+                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                            {{ $t('no_events') || 'No Events Yet' }}
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            {{ $t('no_events_description') || 'Check back soon for upcoming events and activities.' }}
+                        </p>
+                    </div>
+                </div>
+
                 <!-- Pagination -->
-                <Pagination 
-                    v-if="posts.meta" 
-                    class="mt-6" 
-                    :meta="posts.meta" 
-                />
+                <div v-if="posts.meta && posts.meta.last_page > 1" class="col-span-full mt-12">
+                    <Pagination 
+                        class="flex justify-center" 
+                        :meta="posts.meta" 
+                    />
+                </div>
             </div>
         </section>
     </GeneralLayout>
 </template>
+
+<style scoped>
+.bg-grid-slate-100 {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(51 65 85 / 0.1)'%3E%3Cpath d='M0 .5H31.5V32'/%3E%3C/svg%3E");
+}
+</style>

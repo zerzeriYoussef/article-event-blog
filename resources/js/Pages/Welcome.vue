@@ -70,6 +70,40 @@ const descriptions = {
 
         <Hero />
         <StackSection />
+        
+        <!-- Featured Events Section -->
+        <section v-if="posts && posts.length > 0" id="events" class="py-20 bg-white dark:bg-gray-900">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                        {{ $t('featured_events') || 'Featured Events' }}
+                    </h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                        {{ $t('featured_events_description') || 'Discover our latest academic events, workshops, and conferences' }}
+                    </p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <BlogCard 
+                        v-for="post in posts.slice(0, 6)" 
+                        :key="post.id" 
+                        :item="post" 
+                    />
+                </div>
+                
+                <div class="text-center mt-12">
+                    <Link 
+                        :href="route('posts.index')"
+                        class="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-colors duration-200"
+                    >
+                        {{ $t('view_all_events') || 'View All Events' }}
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </Link>
+                </div>
+            </div>
+        </section>
       
     </GeneralLayout>
 </template>

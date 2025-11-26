@@ -87,12 +87,33 @@ class Post extends Model implements HasMedia, Feedable
 
     /**
      * Get the route key for the model.
+     * Always use ID for Filament admin panel, slug for public routes.
      *
      * @return string
      */
     public function getRouteKeyName()
     {
+        // Always use ID in admin context, slug for public
+        if (request()->is('admin/*') || str_contains(request()->url(), '/admin/')) {
+            return 'id';
+        }
         return 'slug';
+    }
+
+    /**
+     * Get the value of the model's route key.
+     * Return ID for Filament admin, slug for public routes.
+     */
+    public function getRouteKey()
+    {
+        // Always use ID in admin context
+        if (request()->is('admin/*') || str_contains(request()->url(), '/admin/')) {
+            return $this->getKey();
+        }
+        
+        // For public routes, return the slug for current locale
+        $locale = app()->getLocale();
+        return $this->getTranslation('slug', $locale) ?? $this->getKey();
     }
 
     // public function excerpt(int $limit = 100): string
@@ -118,6 +139,41 @@ class Post extends Model implements HasMedia, Feedable
         return $this
             ->morphToMany(self::getTagClassName(), 'taggable', 'taggables', null, 'tag_id')
             ->orderBy('order_column');
+    }
+
+    /**
+     * Get all participants (users who requested to join this event).
+     */
+    public function participants()
+    {
+        return $this->hasMany(EventParticipant::class);
+    }
+
+    /**
+     * Get pending participant requests.
+     */
+    public function pendingParticipants()
+    {
+        return $this->hasMany(EventParticipant::class)->where('status', 'pending');
+    }
+
+    /**
+     * Get accepted participants.
+     */
+    public function acceptedParticipants()
+    {
+        return $this->hasMany(EventParticipant::class)->where('status', 'accepted');
+    }
+
+    /**
+     * Get users who are participating in this event (through participants relationship).
+     */
+    public function participatingUsers()
+    {
+        return $this->belongsToMany(User::class, 'event_participants', 'post_id', 'user_id')
+            ->withPivot('status', 'message', 'responded_at')
+            ->withTimestamps()
+            ->wherePivot('status', 'accepted');
     }
 
     public function scopePublished($query)
